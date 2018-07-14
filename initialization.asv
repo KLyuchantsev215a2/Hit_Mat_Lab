@@ -1,0 +1,12 @@
+function [init] = initialization(L,H,N)
+
+N_y = fix(sqrt(N*L/H));
+N_x = fix( N / N_y);
+
+for  i=1:N
+	x(1,1,i) = (i-fix(i/N_x)*N_x)*L/N_x;
+	x(1,2,i) = (fix(i / N_x) )*H / N_y;
+    plot(x(1,1,i),x(1,2,i),'.','color',colours(x(1,1,i),:),'MarkerSize',5);
+
+end
+init=x;

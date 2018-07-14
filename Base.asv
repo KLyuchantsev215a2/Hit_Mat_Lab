@@ -1,4 +1,4 @@
-function [main] = Base(rho,H,L,N,v_0,Time,h,dt,mu,k)
+function [main] = Base(rho,H,L,N,v_0,Time,h,dt)
 %input:
     %rho = initial density
     %H = height of a plate
@@ -7,9 +7,7 @@ function [main] = Base(rho,H,L,N,v_0,Time,h,dt,mu,k)
     %v_0 = initial velocity
 %outpt:
     %dynamics of the body
-    %mu,k the constants of the material for the generalized Hooke Law
-    mu=1;
-    k=1;
+
     S=H*L;
     m=rho*S/N;
     
@@ -39,9 +37,7 @@ function [main] = Base(rho,H,L,N,v_0,Time,h,dt,mu,k)
     for i = 1:fix(Time/dt)
          for a = 1:N
              SIG_upper(1:2,1:2,a)=ComputeStress(F_upper(1:2,1:2,a),mu,k);
-             SIG_lower(1:2,1:2,a)=ComputeStress(F_lower(1:2,1:2,a),mu,k);
          end
-         
     end
     
     main=F;    
