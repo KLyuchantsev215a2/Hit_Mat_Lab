@@ -1,9 +1,10 @@
-function [init] =initialization_x(flag) %initialization(L,H,N,flag)
+function [init] =initialization_x(flag,N) %initialization(L,H,N,flag)
 %for now size fixed (2,2)
 %flag 1 -upper plate -1 -lower plate
 %N_y = fix(sqrt(N*L/H));
 %N_x = fix( N / N_y);
 a=1;
+x=zeros(1,2,N);
 
 for  i=1:3
     for  j=1:3
@@ -20,5 +21,4 @@ for  i=1:3
         a=a+1;
     end
 end
- disp(x);
 init=x;

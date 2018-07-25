@@ -1,4 +1,5 @@
-function [init] =initialization_v(v_0)
+function [init] =initialization_v(v_0,N)
+
 v=zeros(1,2,N);
     for a=1:9
         v(1,1,a)=v_0;
