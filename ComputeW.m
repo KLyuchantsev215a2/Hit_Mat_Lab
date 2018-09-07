@@ -1,4 +1,4 @@
-function [W]=ComputeW(a,b,x,h)
+function [W]=ComputeW(i,j,x,h)
 %kernel of SPH as a function
 % of the coordinate particle i and j
 
@@ -12,8 +12,8 @@ W=0;
 
 r=zeros(1, 2);
 
-r(1,1)=x(1,1,a)-x(1,1,b);
-r(1,2)=x(1,2,a)-x(1,2,b);
+r(1,1)=x(1,1,i)-x(1,1,j);
+r(1,2)=x(1,2,i)-x(1,2,j);
 
 q=norm(r,2)/h;
 C=1/(pi*h*h);

@@ -1,12 +1,12 @@
-function [viscocity]=ComputeViscocity(x,v,rho,a,b,E,h)
+function [viscocity]=ComputeViscocity(x,v,rho,i,j,E,h)
     
     %E- elastic modulus for materials
 	
-    r_ab=x(1:2,a)-x(1:2,b);
-    v_ab=v(1:2,a)-v(1:2,b);
+    r_ab=x(1:2,i)-x(1:2,j);
+    v_ab=v(1:2,i)-v(1:2,j);
     
-    rho_a=rho(a);
-    rho_b=rho(b);
+    rho_a=rho(i);
+    rho_b=rho(j);
     
 	if v_ab* r_ab>0
 		viscocity=0;

@@ -1,7 +1,7 @@
- function [rho] = ComputeRho(a,x,m,N,h)
+ function [rho] = ComputeRho(i,x,m,N,h)
 
 rho=0;
-for b = 1:N
-    rho=rho+m*ComputeW(a,b,x,h); 
+for j = 1:N
+    rho=rho+m*ComputeW(i,j,x,h); 
 end
 

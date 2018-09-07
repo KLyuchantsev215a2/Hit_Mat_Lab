@@ -14,8 +14,8 @@ k = 5;
 %outpt:
     %dynamics of the body
     %mu,k the constants of the material for the generalized Hooke Law
-    N=18;
-    S=3*3+3*3;
+    N=50;
+    S=5*5+5*5;
    %S=H*L;
     m=rho_0*S/N;
     
@@ -28,55 +28,61 @@ k = 5;
     SIG=zeros(2,2,N);
     nabla_W=zeros(1,2);
     
-    for a = 1:N
-      F(1:2,1:2,a)=eye(2);
-      SIG(1:2,1:2,a)=ComputeStress(F(1:2,1:2,a),mu,k);
+    for i = 1:N
+      F(1:2,1:2,i)=eye(2);
+      SIG(1:2,1:2,i)=ComputeStress(F(1:2,1:2,i),mu,k);
     end
      
     rho=rho_0*ones(1,N);
     
-    for i = 1:fix(Time/dt)
+    for n = 1:fix(Time/dt)
                 
-         for a = 1:N
-             for b = 1:N
-                for betta = 1:2
-                      v(1,1,a)=v(1,1,a)-dt*(m*(SIG(1,betta,a)/rho(1,a)^2+SIG(1,betta,b)/rho(1,b)^2));%можно ли сделать цикл? 
-                      v(1,2,a)=v(1,2,a)-dt*(m*(SIG(2,betta,a)/rho(1,a)^2+SIG(2,betta,b)/rho(1,b)^2));
+         for i = 1:N
+             for j = 1:N
+                for beta = 1:2
+                      nabla_W=Compute_nabla_W(i,j,x,h,beta);
+                     
+                      v(1,1,i)=v(1,1,i)-dt*(m*(SIG(1,beta,i)/rho(1,i)^2+SIG(1,beta,j)/rho(1,j)^2))*nabla_W(beta); 
+                      v(1,2,i)=v(1,2,i)-dt*(m*(SIG(2,beta,i)/rho(1,i)^2+SIG(2,beta,j)/rho(1,j)^2))*nabla_W(beta);
                 end
              end
          end
          
          
-         for a = 1:N
-             for b = 1:N
-                for betta = 1:2
-                      nabla_W=Compute_nabla_W(a,b,x,h,betta);
+         for i = 1:N
+             for j = 1:N
+                for beta = 1:2
+                      nabla_W=Compute_nabla_W(i,j,x,h,beta);
 
-                      L(1,betta,a)= (m/rho(1,b)*(v(1,1,b)-v(1,1,a))*nabla_W(betta));  
-                      L(2,betta,a)=(m/rho(1,b)*(v(1,2,b)-v(1,2,a))*nabla_W(betta));   
+                      L(1,beta,i)= (m/rho(1,j)*(v(1,1,j)-v(1,1,i))*nabla_W(beta));  
+                      L(2,beta,i)=(m/rho(1,j)*(v(1,2,j)-v(1,2,i))*nabla_W(beta));   
                 end
              end
          end
          
          
-        for a = 1:N
+        for i = 1:N
              %F(:,:,a)= F(:,:,a)+dt* L(:,:,a);    % €вна€ схема Ёйлера
-             dtLL = dt* L(:,:,a);
-             F(:,:,a)= expm(dtLL)*F(:,:,a);
+             dtLL = dt* L(:,:,i);
+             F(:,:,i)= expm(dtLL)*F(:,:,i);
         end
-        for a = 1:N
-             SIG(1:2,1:2,a)=ComputeStress(F(1:2,1:2,a),mu,k);
+        
+        for i = 1:N
+             SIG(1:2,1:2,i)=ComputeStress(F(1:2,1:2,i),mu,k);
         end
-        for a = 1:N
-             x(1,1,a)=x(1,1,a)+dt*v(1,1,a);
-             x(1,2,a)=x(1,2,a)+dt*v(1,2,a);
-             rho(1,a)=ComputeRho(a,x,m,N,h);
+        
+        for i = 1:N
+             x(1,1,i)=x(1,1,i)+dt*v(1,1,i);
+             x(1,2,i)=x(1,2,i)+dt*v(1,2,i);
+             rho(1,i)=ComputeRho(i,x,m,N,h);
         end
-     x_coord(1:N) = x(1,1,1:N);
-     y_coord(1:N) = x(1,2,1:N);
-     scatter(x_coord,y_coord);
-            pause(0.001);
+        
+        x_coord(1:N) = x(1,1,1:N);
+        y_coord(1:N) = x(1,2,1:N);
+        scatter(x_coord,y_coord);
+        pause(0.001);
+        
     end
     
-       disp(x);
+    disp(x);
     main=F;    
