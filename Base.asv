@@ -41,9 +41,9 @@ k = 5;
              for j = 1:N
                 for beta = 1:2
                       nabla_W=Compute_nabla_W(i,j,x,h,beta);
-                      PI=ComputeViscocity(x,v,rho,i,j,h);
-                      v(1,1,i)=v(1,1,i)-dt*(m*(SIG(1,beta,i)/rho(1,i)^2+SIG(1,beta,j)/rho(1,j)^2)-PI*(1==beta))*nabla_W(beta); 
-                      v(1,2,i)=v(1,2,i)-dt*(m*(SIG(2,beta,i)/rho(1,i)^2+SIG(2,beta,j)/rho(1,j)^2)-PI*(2==beta))*nabla_W(beta);
+                      PI=ComputeViscocity(x
+                      v(1,1,i)=v(1,1,i)-dt*(m*(SIG(1,beta,i)/rho(1,i)^2+SIG(1,beta,j)/rho(1,j)^2))*nabla_W(beta); 
+                      v(1,2,i)=v(1,2,i)-dt*(m*(SIG(2,beta,i)/rho(1,i)^2+SIG(2,beta,j)/rho(1,j)^2))*nabla_W(beta);
                 end
              end
          end
