@@ -16,7 +16,7 @@ end
 
 for  i=1:3
     for  j=1:3
-        x(1,1,a) =-i*flag;
+        x(1,1,a) =i*flag;
         x(1,2,a) =-j*flag;
         a=a+1;
     end

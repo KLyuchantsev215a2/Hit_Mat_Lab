@@ -1,4 +1,4 @@
-function [stress] = ComputeStress(F,mu,k)
+function [stress2x2] = ComputeStress(F2x2,mu,k)
 % Subroutine which computes Cauchy stress tensor as a function
 % of the deformation gradient F
 % input:  F = deformation gradient
@@ -8,8 +8,11 @@ function [stress] = ComputeStress(F,mu,k)
 %
 %   neo-Hookean material
 %
+F = F2x2;
+F(3,3) = 1;
 J = det(F);
 B = F*F';  % left Cauchy-Green tensor
 Biso = J^(-2/3)*B;    % isochoric part of the stress
-devBiso = Biso - 1/3*trace(Biso)*eye(2);   % deviatoric part Biso
-stress = 2*mu*devBiso + k*(J-1)*eye(2);
+devBiso = Biso - 1/3*trace(Biso)*eye(3);   % deviatoric part Biso
+stress = 2*mu*devBiso + k*(J-1)*eye(3);
+stress2x2(1:2,1:2) = stress(1:2,1:2);
