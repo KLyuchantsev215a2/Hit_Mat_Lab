@@ -1,7 +1,7 @@
 rho_0 =1;
 v_0 = 0.5;
 Time = 10;
-h=2;
+h=1;
 dt = 0.001;
 mu = 2;
 k = 5;
@@ -42,8 +42,7 @@ k = 5;
                 for beta = 1:2
                       nabla_W=Compute_nabla_W(i,j,x,h,beta);
                       PI=ComputeViscocity(x,v,rho,i,j,h);
-                      v(1,1,i)=v(1,1,i)-dt*(m*(SIG(1,beta,i)/rho(1,i)^2+SIG(1,beta,j)/rho(1,j)^2)-PI*(1==beta))*nabla_W(beta); 
-                      v(1,2,i)=v(1,2,i)-dt*(m*(SIG(2,beta,i)/rho(1,i)^2+SIG(2,beta,j)/rho(1,j)^2)-PI*(2==beta))*nabla_W(beta);
+                      v=ComputeVelocity(i,j,beta,dt,m,v,rho,SIG,PI,nabla_W);
                 end
              end
          end
@@ -53,16 +52,14 @@ k = 5;
              for j = 1:N
                 for beta = 1:2
                       nabla_W=Compute_nabla_W(i,j,x,h,beta);
-
-                      L(1,beta,i)= (m/rho(1,j)*(v(1,1,j)-v(1,1,i))*nabla_W(beta));  
-                      L(2,beta,i)=(m/rho(1,j)*(v(1,2,j)-v(1,2,i))*nabla_W(beta));   
+                      L=ComputeL(i,j,beta,m,v,rho,nabla_W);  
                 end
              end
          end
          
          
         for i = 1:N
-             %F(:,:,a)= F(:,:,a)+dt* L(:,:,a);    % €вна€ схема Ёйлера
+             %F(:,:,a)= F(:,:,a)+dt* L(:,:,a);    % ????? ????? ??????
              dtLL = dt* L(:,:,i);
              F(:,:,i)= expm(dtLL)*F(:,:,i);
         end
@@ -80,7 +77,7 @@ k = 5;
         x_coord(1:N) = x(1,1,1:N);
         y_coord(1:N) = x(1,2,1:N);
         scatter(x_coord,y_coord);
-        pause(0.001);
+        pause(0.00001);
         
     end
     
