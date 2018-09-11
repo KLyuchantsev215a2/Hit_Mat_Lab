@@ -9,7 +9,7 @@ x=zeros(1,2,N);
 for  xi=1:5
     for  yi=1:5
         x(1,1,i) =xi;
-        x(1,2,i) =yi;
+        x(1,2,i) =yi-0.7;
         i=i+1;
     end
 end
@@ -17,7 +17,7 @@ end
 for  xi=1:5
     for  yi=1:5
         x(1,1,i) =xi*flag;
-        x(1,2,i) =-yi*flag;
+        x(1,2,i) =-yi*flag+0.7;
         i=i+1;
     end
 end
