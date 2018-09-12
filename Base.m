@@ -11,11 +11,11 @@
 rho_0 =1;
 v_0 = 0.5;
 Time = 10;
-h=1.5;
+h=2;
 dt = 0.001;
 mu = 2;
 k = 5;
-E=5;
+E=500;
 N=50;
 S=5*5+5*5;
 %S=H*L;
@@ -43,7 +43,7 @@ m=rho_0*S/N;
              for j = 1:N
                 for beta = 1:2
                       nabla_W=Compute_nabla_W(i,j,x,h,beta);
-                      PI=0;%ComputeViscocity(x,v,rho,i,j,h,E);
+                      PI=ComputeViscocity2(x,v,rho,i,j,h,E);
                       v=ComputeVelocity(i,j,beta,dt,m,v,rho,SIG,PI,nabla_W);
                 end
              end
@@ -61,7 +61,7 @@ m=rho_0*S/N;
          
          
         for i = 1:N
-            % F(1:2,1:2,i)= F(1:2,1:2,i)+dt* L(1:2,1:2,i);    
+             %F(1:2,1:2,i)= F(1:2,1:2,i)+dt* L(1:2,1:2,i);    
              dtLL = dt* L(1:2,1:2,i);
              F(1:2,1:2,i)= expm(dtLL)*F(1:2,1:2,i);
         end
@@ -79,14 +79,25 @@ m=rho_0*S/N;
              rho(1,i)=ComputeRho(i,x,m,N,h);
         end
             
+       
         x_coord(1:N) = x(1,1,1:N);
         y_coord(1:N) = x(1,2,1:N);
+        subplot(2,2,1);
         scatter(x_coord,y_coord);
+       
+        
+       detF=ones(1,N);
+       for i = 1:N
+              detF(1,i)=det(F(1:2,1:2,i));
+       end
+       
+        tri=delaunay(x_coord,y_coord);
+        subplot(2,2,2);
+        trisurf(tri,x_coord,y_coord,detF);
+        
+        subplot(2,2,3);
+        trisurf(tri,x_coord,y_coord,rho);
         pause(0.00001);
-      %  x_coord(1:N) = rho(1:N);
-       % y_coord(1:N) = x(1,2,1:N);
-       % scatter(y_coord,x_coord);
-       % pause(0.00001);
         
     end
     
