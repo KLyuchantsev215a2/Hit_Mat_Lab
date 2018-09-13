@@ -9,7 +9,7 @@
     %mu,k the constants of the material for the generalized Hooke Law
     %E- elastic modulus for materials
 rho_0 =1;
-v_0 = 0.5;
+v_0 = 10;
 Time = 10;
 h=2;
 dt = 0.001;
@@ -43,7 +43,7 @@ m=rho_0*S/N;
              for j = 1:N
                 for beta = 1:2
                       nabla_W=Compute_nabla_W(i,j,x,h,beta);
-                      PI=ComputeViscocity2(x,v,rho,i,j,h,E);
+                      PI=ComputeViscocity(x,v,rho,i,j,h,E);
                       v=ComputeVelocity(i,j,beta,dt,m,v,rho,SIG,PI,nabla_W);
                 end
              end
@@ -61,7 +61,7 @@ m=rho_0*S/N;
          
          
         for i = 1:N
-             %F(1:2,1:2,i)= F(1:2,1:2,i)+dt* L(1:2,1:2,i);    
+            % F(1:2,1:2,i)= F(1:2,1:2,i)+dt* L(1:2,1:2,i);    
              dtLL = dt* L(1:2,1:2,i);
              F(1:2,1:2,i)= expm(dtLL)*F(1:2,1:2,i);
         end
@@ -88,7 +88,7 @@ m=rho_0*S/N;
         
        detF=ones(1,N);
        for i = 1:N
-              detF(1,i)=det(F(1:2,1:2,i));
+              detF(1,i)=det(F(1:2,1:2,i))*100;
        end
        
         tri=delaunay(x_coord,y_coord);

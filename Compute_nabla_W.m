@@ -10,7 +10,7 @@ function [nabla_W]=Compute_nabla_W(i,j,x,h,beta)
 % output: W = the force of the particle j effect on the initial i
 
 nabla_W=zeros(1, 2);
-
+    
 r=zeros(1, 2);
 
 r(1,1)=x(1,1,i)-x(1,1,j);
@@ -22,5 +22,5 @@ C=1/(pi*h*h);
 if (q>0) && (q<1)
   nabla_W(1,beta)=C*(15 / 7)*(-2*q+3/2*q*q)*(r(1,beta)/(h*norm(r)));
 elseif (q >= 1) && (q <= 2)
-   nabla_W(1,beta) = -C*(5 / 14)*3*(2 - q)^2*(r(1,beta)/(h*norm(r)));
+   nabla_W(1,beta) = C*(15 / 7)*(-1/2)*(2 - q)^2*(r(1,beta)/(h*norm(r)));
 end
