@@ -8,25 +8,28 @@
     %dynamics of the body
     %mu,k the constants of the material for the generalized Hooke Law
     %E- elastic modulus for materials
+    clear;
+    
 rho_0 =1;
 v_0 = 1;
 Time = 10;
 h=2;
 dt = 0.001;
-mu = 2;
-k = 5;
-E=50;
-sqn=5;
+mu = 20;             % модуль сдвига
+k = 50;              % к-т объёмного сжатия
+E=9*k*mu/(3*k+mu);   % модуль Юнга
+sqn=6;
 N=sqn*sqn*2;
 S=sqn*sqn*2;
 %S=H*L;
 m=rho_0*S/N;
+fr=10;
     
     %coordinate(particle) initialization
     x=initialization_x(1,N,sqn);    
     v=initialization_v(v_0,N,sqn);
     
-    L=zeros(2,2,N);
+    
     F=zeros(2,2,N);
     SIG=zeros(2,2,N);
     nabla_W=zeros(1,2);
@@ -39,12 +42,12 @@ m=rho_0*S/N;
     rho=rho_0*ones(1,N);
     
     for n = 1:fix(Time/dt)
-                
+                L=zeros(2,2,N);
          for i = 1:N
              for j = 1:N
                 for beta = 1:2
                       nabla_W=Compute_nabla_W(i,j,x,h,beta);
-                      PI=ComputeViscocity2(x,v,rho,i,j,h,E);
+                      PI=0;%ComputeViscocity(x,v,rho,i,j,h,E);
                       v=ComputeVelocity(i,j,beta,dt,m,v,rho,SIG,PI,nabla_W);
                 end
              end
@@ -62,9 +65,9 @@ m=rho_0*S/N;
          
          
         for i = 1:N
-            % F(1:2,1:2,i)= F(1:2,1:2,i)+dt* L(1:2,1:2,i);    
-             dtLL = dt* L(1:2,1:2,i);
-             F(1:2,1:2,i)= expm(dtLL)*F(1:2,1:2,i);
+             F(1:2,1:2,i)= F(1:2,1:2,i)+dt* L(1:2,1:2,i);    
+             %dtLL = dt* L(1:2,1:2,i);
+            % F(1:2,1:2,i)= expm(dtLL)*F(1:2,1:2,i);
         end
         
         for i = 1:N
@@ -80,15 +83,16 @@ m=rho_0*S/N;
              rho(1,i)=ComputeRho(i,x,m,N,h);
         end
             
-       
-        x_coord(1:N/2) = x(1,1,1:N/2);
-        y_coord(1:N/2) = x(1,2,1:N/2);
+        if fix(n/fr)==n/fr
+            n=n;
+        x_coord(1:N) = x(1,1,1:N);
+        y_coord(1:N) = x(1,2,1:N);
         subplot(2,2,1);
         scatter(x_coord,y_coord);
        
         
-       detF=ones(1,N/2);
-       for i = 1:N/2
+       detF=ones(1,N);
+       for i = 1:N
               detF(1,i)=det(F(1:2,1:2,i));
        end
        
@@ -97,8 +101,10 @@ m=rho_0*S/N;
         trisurf(tri,x_coord,y_coord,detF);
         
         subplot(2,2,3);
-        trisurf(tri,x_coord,y_coord,rho(1:N/2));
+        trisurf(tri,x_coord,y_coord,rho(1:N));
+        
         pause(0.0000001);
+        end
         
     end
     main=F;    
