@@ -10,21 +10,20 @@
     %E- elastic modulus for materials
     clear;
     
-rho_0 =1;
-v_0 = 1;
+rho_0 =1.2;
+v_0 = 10;
 Time = 10;
-h=2;
-dt = 0.001;
-mu = 20;             % модуль сдвига
-k = 50;              % к-т объёмного сжатия
+mu = 1000;             % модуль сдвига
+k = 10000;              % к-т объёмного сжатия
 E=9*k*mu/(3*k+mu);   % модуль Юнга
-sqn=6;
+sqn=3;
 N=sqn*sqn*2;
-S=sqn*sqn*2;
+S=10^(-4)*2;
 %S=H*L;
 m=rho_0*S/N;
 fr=10;
-    
+h=(m/rho_0)^(1/2);
+dt=0.00001;%0.01*h/v_0;
     %coordinate(particle) initialization
     x=initialization_x(1,N,sqn);    
     v=initialization_v(v_0,N,sqn);
@@ -47,7 +46,7 @@ fr=10;
              for j = 1:N
                 for beta = 1:2
                       nabla_W=Compute_nabla_W(i,j,x,h,beta);
-                      PI=0;%ComputeViscocity(x,v,rho,i,j,h,E);
+                      PI=0;%ComputeViscocity(x,v,rho,i,j,h,E,mu);
                       v=ComputeVelocity(i,j,beta,dt,m,v,rho,SIG,PI,nabla_W);
                 end
              end
@@ -65,9 +64,9 @@ fr=10;
          
          
         for i = 1:N
-             F(1:2,1:2,i)= F(1:2,1:2,i)+dt* L(1:2,1:2,i);    
-             %dtLL = dt* L(1:2,1:2,i);
-            % F(1:2,1:2,i)= expm(dtLL)*F(1:2,1:2,i);
+              %F(1:2,1:2,i)= F(1:2,1:2,i)+dt* L(1:2,1:2,i)*F(1:2,1:2,i);  
+             dtLL = dt* L(1:2,1:2,i);
+             F(1:2,1:2,i)= expm(dtLL)*F(1:2,1:2,i);
         end
         
         for i = 1:N
@@ -83,28 +82,28 @@ fr=10;
              rho(1,i)=ComputeRho(i,x,m,N,h);
         end
             
-        if fix(n/fr)==n/fr
-            n=n;
-        x_coord(1:N) = x(1,1,1:N);
-        y_coord(1:N) = x(1,2,1:N);
-        subplot(2,2,1);
-        scatter(x_coord,y_coord);
+        if (fix(n/fr)==n/fr)
+         x_coord(1:N) = x(1,1,1:N);
+         y_coord(1:N) = x(1,2,1:N);
+         subplot(2,2,1);
+         scatter(x_coord,y_coord,'black');
        
         
-       detF=ones(1,N);
-       for i = 1:N
-              detF(1,i)=det(F(1:2,1:2,i));
-       end
+         detF=ones(1,N);
+         for i = 1:N
+                 detF(1,i)=det(F(1:2,1:2,i));
+         end
        
-        tri=delaunay(x_coord,y_coord);
-        subplot(2,2,2);
-        trisurf(tri,x_coord,y_coord,detF);
+         tri=delaunay(x_coord,y_coord);
+         subplot(2,2,2);
+          trisurf(tri,x_coord,y_coord,detF);
         
-        subplot(2,2,3);
-        trisurf(tri,x_coord,y_coord,rho(1:N));
+         subplot(2,2,3);
+         trisurf(tri,x_coord,y_coord,rho(1:N));
         
-        pause(0.0000001);
-        end
+         pause(0.0000001);
         
+         disp(dt*n);
+     end
     end
     main=F;    

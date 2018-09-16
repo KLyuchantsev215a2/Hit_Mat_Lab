@@ -1,4 +1,4 @@
-function [viscocity]=ComputeViscocity(x,v,rho,i,j,h,E)
+function [viscocity]=ComputeViscocity(x,v,rho,i,j,h,E,mu)
     
   
 	
@@ -17,8 +17,8 @@ function [viscocity]=ComputeViscocity(x,v,rho,i,j,h,E)
         h_ab=h;
         
         ro_ab=(rho_a+rho_b)/2;
-        cs_a=sqrt(E/rho_a); %скорость продольной волны
-        cs_b=sqrt(E/rho_b);
+        cs_a=sqrt((E+4/3*mu)/rho_a); %скорость продольной волны
+        cs_b=sqrt((E+4/3*mu)/rho_b);
         c_ab=(cs_a+ cs_b)/2;
         
         nu=h_ab*0.1;

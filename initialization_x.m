@@ -8,16 +8,16 @@ x=zeros(1,2,N);
 
 for  xi=1:sqn
     for  yi=1:sqn
-        x(1,1,i) =xi;
-        x(1,2,i) =yi-0.5;
+        x(1,1,i) =xi*0.01/sqn;
+        x(1,2,i) =yi*0.01/sqn;
         i=i+1;
     end
 end
 
 for  xi=1:sqn
     for  yi=1:sqn
-        x(1,1,i) =xi;
-        x(1,2,i) =-yi+0.5;
+        x(1,1,i) =xi*0.01/sqn;
+        x(1,2,i) =-yi*0.01/sqn;
         i=i+1;
     end
 end
