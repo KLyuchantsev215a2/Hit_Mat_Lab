@@ -11,19 +11,19 @@
     clear;
     
 rho_0 =1.2;
-v_0 = 10;
+v_0 = 2;
 Time = 10;
 mu = 1000;             % модуль сдвига
 k = 10000;              % к-т объёмного сжатия
 E=9*k*mu/(3*k+mu);   % модуль Юнга
-sqn=3;
+sqn=6;
 N=sqn*sqn*2;
 S=10^(-4)*2;
 %S=H*L;
 m=rho_0*S/N;
 fr=10;
 h=(m/rho_0)^(1/2);
-dt=0.00001;%0.01*h/v_0;
+dt=0.01*h/v_0;
     %coordinate(particle) initialization
     x=initialization_x(1,N,sqn);    
     v=initialization_v(v_0,N,sqn);
@@ -90,8 +90,13 @@ dt=0.00001;%0.01*h/v_0;
        
         
          detF=ones(1,N);
+         detSIG=ones(1,N);
          for i = 1:N
                  detF(1,i)=det(F(1:2,1:2,i));
+         end
+         
+         for i = 1:N
+                 detSIG(1,i)=det(SIG(1:2,1:2,i));
          end
        
          tri=delaunay(x_coord,y_coord);
@@ -100,10 +105,12 @@ dt=0.00001;%0.01*h/v_0;
         
          subplot(2,2,3);
          trisurf(tri,x_coord,y_coord,rho(1:N));
-        
+         
+         subplot(2,2,4);
+         trisurf(tri,x_coord,y_coord,detSIG);
          pause(0.0000001);
         
-         disp(dt*n);
+         
      end
     end
     main=F;    

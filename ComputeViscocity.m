@@ -22,8 +22,7 @@ function [viscocity]=ComputeViscocity(x,v,rho,i,j,h,E,mu)
         c_ab=(cs_a+ cs_b)/2;
         
         nu=h_ab*0.1;
-        mu=(h*dot(v_ab,r_ab)) / (dot(r_ab,r_ab) + nu^2);
-        
+        mu=(h_ab*dot(v_ab,r_ab)) / (dot(r_ab,r_ab) + nu^2);
         viscocity=(-alpha*c_ab*mu + betta*mu*mu) / ro_ab;
     end
     
